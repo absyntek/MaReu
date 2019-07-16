@@ -14,8 +14,12 @@ import android.view.ViewGroup;
 
 import com.example.mareu.R;
 import com.example.mareu.di.DI;
+import com.example.mareu.events.DeleteMeetingEvent;
 import com.example.mareu.model.Meeting;
 import com.example.mareu.service.MeetingApiService;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +28,6 @@ import java.util.List;
 public class MeetingFragment extends Fragment {
 
     protected RecyclerView mRecyclerView;
-    protected List<Meeting> mMeetings;
     protected MeetingApiService mMeetingApiService;
 
 
@@ -54,30 +57,37 @@ public class MeetingFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         mMeetingApiService = DI.getServiceMeet();
-        mMeetings = new ArrayList<>();
         initList();
         super.onActivityCreated(savedInstanceState);
     }
 
     private void initList (){
         if (mMeetingApiService.getMeetings() != null){
-            mMeetings = mMeetingApiService.getMeetings();
-            mRecyclerView.setAdapter(new MyMeetingRecyclerViewAdapter(mMeetings));
+            mRecyclerView.setAdapter(new MyMeetingRecyclerViewAdapter(mMeetingApiService.getMeetings()));
         }
     }
+
     @Override
     public void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void onResume() {
         initList();
         super.onResume();
+    }
+
+    @Subscribe
+    public void onDeleteNeighbour(DeleteMeetingEvent event) {
+        mMeetingApiService.deletMeeting(event.mMeeting);
+        initList();
     }
 }

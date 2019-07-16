@@ -1,9 +1,7 @@
 package com.example.mareu.model;
 
-import android.provider.ContactsContract;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Model object representing a Meeting

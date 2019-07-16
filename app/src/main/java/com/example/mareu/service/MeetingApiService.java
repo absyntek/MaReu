@@ -12,5 +12,7 @@ public interface MeetingApiService {
 
     void deletMeeting (Meeting meeting);
 
+    int getMeetingID (Meeting meeting);
+
     String [] getMeetingPoints();
 }

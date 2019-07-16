@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Heure de la Réu :" />
+            android:text="@string/heure_de_la_r_u" />
 
         <EditText
             android:id="@+id/tvMeetingTime"
@@ -52,7 +52,7 @@
             android:focusable="false"
             android:gravity="center"
             android:inputType="textPersonName"
-            android:text="20:00" />
+            android:text="@string/_20_00" />
 
     </LinearLayout>
 
@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Lieu de la Réu :" />
+            android:text="@string/lieu_de_la_r_u" />
 
         <Spinner
             android:id="@+id/spinnerRoom"
@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Sujet de la Réu" />
+            android:text="@string/sujet_de_la_r_u" />
 
         <EditText
             android:id="@+id/tvTuto"
@@ -125,7 +125,7 @@
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="E-Mail des participants" />
+            android:text="@string/e_mail_des_participants" />
 
         <EditText
             android:id="@+id/tvAddEmail"
@@ -150,10 +150,23 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Valider"
+        android:text="@string/valider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ListView
+        android:id="@+id/listViewEmail"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnValidNewMeeting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/LinearLayoutEmail" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

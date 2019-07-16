@@ -4,6 +4,7 @@ import com.example.mareu.model.Meeting;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DummyMeetingApiService implements MeetingApiService {
 
@@ -29,7 +30,25 @@ public class DummyMeetingApiService implements MeetingApiService {
     }
 
     @Override
+    public int getMeetingID(Meeting meeting) {
+        return mMeetingList.indexOf(meeting);
+    }
+
+    @Override
     public String[] getMeetingPoints() {
         return mMeetingPoints;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DummyMeetingApiService that = (DummyMeetingApiService) o;
+        return Objects.equals(mMeetingList, that.mMeetingList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mMeetingList);
     }
 }
