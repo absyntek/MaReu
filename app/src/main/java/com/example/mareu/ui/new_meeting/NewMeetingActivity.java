@@ -18,10 +18,15 @@ import com.example.mareu.R;
 import com.example.mareu.di.DI;
 import com.example.mareu.model.Meeting;
 import com.example.mareu.service.MeetingApiService;
+import com.example.mareu.utils.RandomColors;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,11 +38,14 @@ public class NewMeetingActivity extends AppCompatActivity {
 
     MeetingApiService mMeetingApiService;
     Meeting mMeeting;
+    protected RandomColors mRandomColors;
+    SimpleDateFormat dateFormat;
 
     String mRoom,mTuto;
     List<String> mEmailList;
     int mHour,mMinutes,mMeetingID;
     boolean mIsItNew;
+    Date mDate;
 
     @BindView(R.id.tvMeetingTime)
     EditText mMeetingTime;
@@ -65,38 +73,44 @@ public class NewMeetingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_meeting);
         ButterKnife.bind(this);
+        mDate = new Date();
+        dateFormat = new SimpleDateFormat ("H'h'mm");
 
         mMeetingApiService = DI.getServiceMeet();
         mEmailList = new ArrayList<>();
 
-        mIsItNew = isItNew();
+        mIsItNew = isItNew(); //TODO c'est mieu de le faire qu'une fois ..??
+
         if (!mIsItNew){
             mMeeting = mMeetingApiService.getMeetings().get(mMeetingID);
             setUI();
         }
+
         configSpinnerRoom();
 
         mMeetingTime.setOnClickListener(view -> {
-            Calendar mcurrentTime = Calendar.getInstance();
-            if (mIsItNew){
-                mHour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                mMinutes = mcurrentTime.get(Calendar.MINUTE);
-            }else{
-                mHour = mMeeting.getHour();
-                mMinutes = mMeeting.getMinutes();
-            }
 
+            Calendar mcurrentTime = Calendar.getInstance();
+            mHour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+            mMinutes = mcurrentTime.get(Calendar.MINUTE);
 
             TimePickerDialog mTimePicker;
             mTimePicker = new TimePickerDialog(NewMeetingActivity.this, (timePicker, selectedHour, selectedMinute) -> {
-                mMeetingTime.setText( selectedHour + ":" + selectedMinute);
-                mHour = selectedHour;
-                mMinutes = selectedMinute;
+
+                try {
+                    mDate = dateFormat.parse(selectedHour + "h" + selectedMinute);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                mMeetingTime.setText( dateFormat.format(mDate));
             }, mHour, mMinutes, true);
             mTimePicker.setTitle("Selectionez l'heure");
             mTimePicker.show();
         });
 
+        /**
+         * List of meeting rooms
+         */
         mSpinnerRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -106,17 +120,17 @@ public class NewMeetingActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 showToast("tu compte faire ta réu dans les couloirs ??");
-                //Toast.makeText(adapterView.getContext(),"tu compte faire ta réu dans les couloirs ??",Toast.LENGTH_SHORT).show();
             }
         });
 
+        /**
+         * Add Email button
+         */
         mfabAddEmail.setOnClickListener(view -> {
             if (mtvAddEmail.getText().length() == 0){
                 showToast("Vous n'avez pas entrer d'adresse Mail");
-                //Toast.makeText(view.getContext(),"Vous n'avez pas entrer d'adresse Mail",Toast.LENGTH_SHORT).show();
             }else if(!checkEmailValid(mtvAddEmail.getText().toString())){
                 showToast("Ceci n'est pas une adresse Mail");
-                //Toast.makeText(view.getContext(),"Vous n'avez pas entrer d'adresse Mail",Toast.LENGTH_SHORT).show();
             }
 
             else {
@@ -127,23 +141,25 @@ public class NewMeetingActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Validation button
+         */
         mbtnValidNewMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mtvTuto.getText().length() == 0){
                     showToast("n'oubliez pas le sujet de la réunion");
-                    //Toast.makeText(view.getContext(),"n'oubliez pas le sujet de la réunion",Toast.LENGTH_SHORT).show();
                 }else if (mEmailList.isEmpty()) {
                     showToast("une réunion tout seul !! étrange");
-                    //Toast.makeText(view.getContext(),"une réunion tout seul !! étrange",Toast.LENGTH_SHORT).show();
                 }else {
+                        mRandomColors = new RandomColors();
                         mTuto = mtvTuto.getText().toString();
                         mMeeting = new Meeting();
-                        mMeeting.setHour(mHour);
-                        mMeeting.setMinutes(mMinutes);
+                        mMeeting.setDate(mDate);
                         mMeeting.setMeetingPoint(mRoom);
                         mMeeting.setTuto(mTuto);
                         mMeeting.setEmails(mEmailList);
+                        mMeeting.setMeetingColor(mRandomColors.getColor());
                         saveMeetingAndBack();
                 }
             }
@@ -160,13 +176,11 @@ public class NewMeetingActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent == null){ return true; }
         else {mMeetingID = intent.getIntExtra("idMeeting",-1);}
-        if (mMeetingID == -1){
-            return true;
-        }else {return false;}
+        return mMeetingID == -1;
     }
 
     private void setUI(){
-        mMeetingTime.setText(mMeeting.getHour() + ":" + mMeeting.getMinutes());
+        mMeetingTime.setText(dateFormat.format(mMeeting.getDate()));
         mSpinnerRoom.setPrompt(mMeeting.getMeetingPoint());
         mtvTuto.setText(mMeeting.getTuto());
         mEmailList = mMeeting.getEmails();
@@ -191,11 +205,7 @@ public class NewMeetingActivity extends AppCompatActivity {
     private boolean checkEmailValid (String email){
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(email);
-        if (mat.matches()){
-            return true;
-        }else {
-            return false;
-        }
+        return mat.matches();
     }
 
     private void showToast (String messageToShow){

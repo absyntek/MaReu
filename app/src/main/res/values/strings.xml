@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MaReu</string>
     <string name="action_settings">Settings</string>
-    <string name="filtrer_par_date">Filtrer par date</string>
+    <string name="filtrer_par_date">Filtrer par heure</string>
     <string name="filtrer_par_lieu">Filtrer par lieu</string>
 
     <!-- TODO: Remove or change this placeholder text -->

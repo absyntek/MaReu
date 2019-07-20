@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mareu.R;
@@ -17,10 +16,10 @@ import com.example.mareu.events.DeleteMeetingEvent;
 import com.example.mareu.model.Meeting;
 import com.example.mareu.service.MeetingApiService;
 import com.example.mareu.ui.new_meeting.NewMeetingActivity;
-import com.example.mareu.utils.RandomColors;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,7 +30,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
     private List<Meeting> mMeetingList;
     protected MeetingApiService mMeetingApiService;
-    protected RandomColors mRandomColors;
+
 
     public MyMeetingRecyclerViewAdapter(List<Meeting> items) {
         mMeetingList = items;
@@ -48,17 +47,13 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
     public void onBindViewHolder(final ViewHolder holder, int position) {
         mMeetingApiService = DI.getServiceMeet();
         Meeting meeting = mMeetingList.get(position);
-        mRandomColors = new RandomColors();
 
-        holder.mItemAvatar.setColorFilter(mRandomColors.getColor());
+        holder.mItemAvatar.setColorFilter(meeting.getMeetingColor());
 
-        holder.mtvInfoMeeting.setText(
-                mMeetingList.get(position).getTuto() + " - " +
-                mMeetingList.get(position).getHour() + "h" +
-                mMeetingList.get(position).getMinutes() + " - " +
-                mMeetingList.get(position).getMeetingPoint()
-        );
-        holder.mtvEmailMeeting.setText(mMeetingList.get(position).getEmails().toString());
+        SimpleDateFormat dateFormat = new SimpleDateFormat ("H'h'mm");
+        String mTimeMeeting =  dateFormat.format(meeting.getDate());
+        holder.mtvInfoMeeting.setText(meeting.getTuto() + " - " + mTimeMeeting + " - " + meeting.getMeetingPoint());
+        holder.mtvEmailMeeting.setText(meeting.getEmails().toString());
 
         holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,9 +1,14 @@
 package com.example.mareu.ui.meeting_list;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +26,7 @@ import com.example.mareu.service.MeetingApiService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -29,6 +34,8 @@ public class MeetingFragment extends Fragment {
 
     protected RecyclerView mRecyclerView;
     protected MeetingApiService mMeetingApiService;
+    List<Meeting> mMeetingList;
+    String mSortBy = "NONE";
 
 
     public MeetingFragment() {
@@ -38,9 +45,20 @@ public class MeetingFragment extends Fragment {
         return new MeetingFragment();
     }
 
+    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() { //TODO est-il possible d'éviter cela ??
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("SORT_ACTION")){
+                mSortBy = intent.getStringExtra("SORTBY");
+            }
+            initList();
+        }
+    };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mBroadcastReceiver, new IntentFilter("SORT_ACTION"));
     }
 
     @Override
@@ -57,14 +75,26 @@ public class MeetingFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         mMeetingApiService = DI.getServiceMeet();
+        mMeetingList = mMeetingApiService.getMeetings();
         initList();
         super.onActivityCreated(savedInstanceState);
     }
 
     private void initList (){
-        if (mMeetingApiService.getMeetings() != null){
-            mRecyclerView.setAdapter(new MyMeetingRecyclerViewAdapter(mMeetingApiService.getMeetings()));
+        if (mSortBy != null) {
+            switch (mSortBy) {
+                case "ROOM":
+                    Collections.sort(mMeetingList, new Meeting.MeetingComparatorRoom());
+                    break;
+                case "DATE":
+                    Collections.sort(mMeetingList, new Meeting.MeetingComparatorTime());
+                    break;
+                case "NONE":
+                    break;
+            }
         }
+        mRecyclerView.setAdapter(new MyMeetingRecyclerViewAdapter(mMeetingList));
+
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.example.mareu.model;
 
 
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,14 +11,9 @@ import java.util.List;
 public class Meeting {
 
     /**
-     * Meeting hour
+     * Meeting time
      */
-    private int mHour;
-
-    /**
-     * Meeting minutes
-     */
-    private int mMinutes;
+    private Date mDate;
 
     /**
      * Meeting room
@@ -33,20 +30,22 @@ public class Meeting {
      */
     private List<String> mEmails;
 
-    public int getHour() {
-        return mHour;
+    /**
+     * Color displayed
+     */
+    private int mMeetingColor;
+
+
+    /**
+     * Getter and Setter
+     * @return
+     */
+    public Date getDate() {
+        return mDate;
     }
 
-    public void setHour(int hour) {
-        mHour = hour;
-    }
-
-    public int getMinutes() {
-        return mMinutes;
-    }
-
-    public void setMinutes(int minutes) {
-        mMinutes = minutes;
+    public void setDate(Date date) {
+        mDate = date;
     }
 
     public String getMeetingPoint() {
@@ -71,5 +70,29 @@ public class Meeting {
 
     public void setEmails(List<String> emails) {
         mEmails = emails;
+    }
+
+    public int getMeetingColor() {
+        return mMeetingColor;
+    }
+
+    public void setMeetingColor(int meetingColor) {
+        mMeetingColor = meetingColor;
+    }
+
+    public static class MeetingComparatorTime implements Comparator<Meeting>{
+
+        @Override
+        public int compare(Meeting meeting, Meeting t1) {
+            return meeting.mDate.compareTo(t1.mDate);
+        }
+    }
+
+    public static class MeetingComparatorRoom implements Comparator<Meeting>{
+
+        @Override
+        public int compare(Meeting meeting, Meeting t1) {
+            return meeting.mMeetingPoint.compareTo(t1.mMeetingPoint);
+        }
     }
 }

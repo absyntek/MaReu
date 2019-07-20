@@ -5,22 +5,27 @@ import android.os.Bundle;
 
 import com.example.mareu.R;
 import com.example.mareu.di.DI;
+import com.example.mareu.model.Meeting;
 import com.example.mareu.service.MeetingApiService;
 import com.example.mareu.ui.new_meeting.NewMeetingActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.ButterKnife;
 
 public class MeetingListActivity extends AppCompatActivity {
 
-    MeetingApiService mMeetingApiService;
     private MeetingFragment mMeetingFragment;
 
     @Override
@@ -28,9 +33,7 @@ public class MeetingListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        ButterKnife.bind(this);
 
-        mMeetingApiService = DI.getServiceMeet();
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -62,16 +65,18 @@ public class MeetingListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        Intent intent = new Intent("SORT_ACTION");
+        switch (item.getItemId()){
+            case R.id.sort_by_name:
+                Log.e("room", "onOptionsItemSelected: ROOM");
+                intent.putExtra("SORTBY", "ROOM");
+                break;
+            case R.id.sort_by_date:
+                intent.putExtra("SORTBY", "DATE");
+                break;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.sort_by_date) {
-            return true;
         }
-
+        LocalBroadcastManager.getInstance(MeetingListActivity.this).sendBroadcast(intent);
         return super.onOptionsItemSelected(item);
     }
 }
