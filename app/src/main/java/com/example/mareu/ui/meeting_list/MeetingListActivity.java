@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.mareu.R;
-import com.example.mareu.di.DI;
-import com.example.mareu.model.Meeting;
-import com.example.mareu.service.MeetingApiService;
 import com.example.mareu.ui.new_meeting.NewMeetingActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -18,11 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import java.util.Collections;
-import java.util.List;
-
-import butterknife.ButterKnife;
 
 public class MeetingListActivity extends AppCompatActivity {
 
