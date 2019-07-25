@@ -10,6 +10,14 @@ import java.util.List;
  */
 public class Meeting {
 
+    public Meeting(Date date, String meetingPoint, String tuto, List<String> emails, int meetingColor) {
+        mDate = date;
+        mMeetingPoint = meetingPoint;
+        mTuto = tuto;
+        mEmails = emails;
+        mMeetingColor = meetingColor;
+    }
+
     /**
      * Meeting time
      */

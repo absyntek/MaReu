@@ -11,7 +11,7 @@ public class DummyMeetingApiService implements MeetingApiService {
     private String mMeetingPoints [] =
             {"Peach", "Mario", "Luigi", "Yoshi", "Toad", "Wario", "Princesse", "Bowser", "KoopaTroopa", "DonkeyKong"};
 
-    private List<Meeting> mMeetingList = new ArrayList<>();
+    private List<Meeting> mMeetingList = DummyMeetingGenerator.generateMeetings();
 
     @Override
     public List<Meeting> getMeetings() {

@@ -154,12 +154,7 @@ public class NewMeetingActivity extends AppCompatActivity {
                 }else {
                         mRandomColors = new RandomColors(view.getContext());
                         mTuto = mtvTuto.getText().toString();
-                        mMeeting = new Meeting();
-                        mMeeting.setDate(mDate);
-                        mMeeting.setMeetingPoint(mRoom);
-                        mMeeting.setTuto(mTuto);
-                        mMeeting.setEmails(mEmailList);
-                        mMeeting.setMeetingColor(mRandomColors.getColor());
+                        mMeeting = new Meeting(mDate,mRoom,mTuto,mEmailList,mRandomColors.getColor());
                         saveMeetingAndBack();
                 }
             }

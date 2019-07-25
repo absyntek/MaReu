@@ -1,12 +1,9 @@
 package com.example.mareu.utils;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.util.Log;
 
 import com.example.mareu.R;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Stack;
 
