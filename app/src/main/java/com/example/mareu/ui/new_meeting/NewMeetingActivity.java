@@ -152,7 +152,7 @@ public class NewMeetingActivity extends AppCompatActivity {
                 }else if (mEmailList.isEmpty()) {
                     showToast("une réunion tout seul !! étrange");
                 }else {
-                        mRandomColors = new RandomColors();
+                        mRandomColors = new RandomColors(view.getContext());
                         mTuto = mtvTuto.getText().toString();
                         mMeeting = new Meeting();
                         mMeeting.setDate(mDate);

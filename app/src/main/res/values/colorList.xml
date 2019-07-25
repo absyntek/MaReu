@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="color_List">
+        <item name = "color_item1">@color/color_item1</item>
+        <item name = "color_item2">@color/color_item2</item>
+        <item name = "color_item3">@color/color_item3</item>
+        <item name = "color_item4">@color/color_item4</item>
+        <item name = "color_item5">@color/color_item5</item>
+        <item name = "color_item6">@color/color_item6</item>
+        <item name = "color_item7">@color/color_item7</item>
+        <item name = "color_item8">@color/color_item8</item>
+        <item name = "color_item9">@color/color_item9</item>
+        <item name = "color_item10">@color/color_item10</item>
+        <item name = "color_item11">@color/color_item11</item>
+        <item name = "color_item12">@color/color_item12</item>
+        <item name = "color_item13">@color/color_item13</item>
+        <item name = "color_item14">@color/color_item14</item>
+        <item name = "color_item15">@color/color_item15</item>
+        <item name = "color_item16">@color/color_item16</item>
+        <item name = "color_item17">@color/color_item17</item>
+        <item name = "color_item18">@color/color_item18</item>
+        <item name = "color_item19">@color/color_item19</item>
+        <item name = "color_item20">@color/color_item20</item>
+    </integer-array>
+
+</resources>
