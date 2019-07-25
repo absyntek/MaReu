@@ -2,20 +2,18 @@ package com.example.mareu.service;
 
 import com.example.mareu.model.Meeting;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class DummyMeetingApiService implements MeetingApiService {
 
-    private String mMeetingPoints [] =
+    private String[] mMeetingPoints =
             {"Peach", "Mario", "Luigi", "Yoshi", "Toad", "Wario", "Princesse", "Bowser", "KoopaTroopa", "DonkeyKong"};
 
     private List<Meeting> mMeetingList = DummyMeetingGenerator.generateMeetings();
 
     @Override
     public List<Meeting> getMeetings() {
-
         return mMeetingList;
     }
 
