@@ -10,4 +10,8 @@ public class DI {
     public static MeetingApiService getServiceMeet(){
         return serviceMeet;
     }
+
+    public static MeetingApiService getNewInstanceApiService(){
+        return new DummyMeetingApiService();
+    }
 }

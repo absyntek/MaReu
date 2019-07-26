@@ -27,7 +27,7 @@ public class DummyMeetingApiServiceTest {
 
     @Before
     public void setup(){
-        mApiService = DI.getServiceMeet();
+        mApiService = DI.getNewInstanceApiService();
     }
 
     @Test
@@ -48,15 +48,15 @@ public class DummyMeetingApiServiceTest {
 
     @Test
     public void deletMeeting() {
-        meeting = mApiService.getMeetings().get(3);
+        meeting = mApiService.getMeetings().get(0);
         mApiService.deletMeeting(meeting);
         assertFalse(mApiService.getMeetings().contains(meeting) );
     }
 
     @Test
     public void getMeetingID() {
-        meeting = mApiService.getMeetings().get(3);
-        assertEquals(3,mApiService.getMeetingID(meeting));
+        meeting = mApiService.getMeetings().get(0);
+        assertEquals(0,mApiService.getMeetingID(meeting));
     }
 
     @Test

@@ -21,9 +21,12 @@ import com.example.mareu.service.MeetingApiService;
 import com.example.mareu.utils.RandomColors;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,11 +44,14 @@ public class NewMeetingActivity extends AppCompatActivity {
     protected RandomColors mRandomColors;
     SimpleDateFormat dateFormat;
 
+    List<Meeting> mMeetings;
     String mRoom,mTuto;
     List<String> mEmailList;
     int mHour,mMinutes,mMeetingID;
     boolean mIsItNew;
     Date mDate;
+
+    final static long MEETING_TIME = 3602000;
 
     @BindView(R.id.tvMeetingTime)
     EditText mMeetingTime;
@@ -77,12 +83,13 @@ public class NewMeetingActivity extends AppCompatActivity {
         dateFormat = new SimpleDateFormat ("H'h'mm");
 
         mMeetingApiService = DI.getServiceMeet();
+        mMeetings = mMeetingApiService.getMeetings();
         mEmailList = new ArrayList<>();
 
         mIsItNew = isItNew(); //TODO c'est mieu de le faire qu'une fois ..??
 
         if (!mIsItNew){
-            mMeeting = mMeetingApiService.getMeetings().get(mMeetingID);
+            mMeeting = mMeetings.get(mMeetingID);
             setUI();
         }
 
@@ -147,11 +154,15 @@ public class NewMeetingActivity extends AppCompatActivity {
         mbtnValidNewMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mtvTuto.getText().length() == 0){
+                if (isItPossible(mDate) != null){
+                    showToast("Tu à déjas une reunion à " + (dateFormat.format(isItPossible(mDate))));
+                }else if (mtvTuto.getText().length() == 0){
                     showToast("n'oubliez pas le sujet de la réunion");
                 }else if (mEmailList.isEmpty()) {
                     showToast("une réunion tout seul !! étrange");
-                }else {
+                }else if (mEmailList.size()<3){
+                    showToast("il faut au moin 3 participant");
+                } else {
                         mRandomColors = new RandomColors(view.getContext());
                         mTuto = mtvTuto.getText().toString();
                         mMeeting = new Meeting(mDate,mRoom,mTuto,mEmailList,mRandomColors.getColor());
@@ -184,7 +195,7 @@ public class NewMeetingActivity extends AppCompatActivity {
 
     private void saveMeetingAndBack(){
         if (!mIsItNew){
-            mMeetingApiService.getMeetings().remove(mMeetingID);
+            mMeetings.remove(mMeetingID);
             mMeetingApiService.addMeeting(mMeeting);
             showToast("La réunion à bien été modifier");
             this.finish();
@@ -211,5 +222,14 @@ public class NewMeetingActivity extends AppCompatActivity {
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, mEmailList);
         mListViewEmail.setAdapter(adapter);
+    }
+
+    private Date isItPossible (Date timeToCheck){
+
+        for (Meeting meeting : mMeetings) {
+            long different_milli = meeting.getDate().getTime() - timeToCheck.getTime();
+            if (different_milli<MEETING_TIME && different_milli> -MEETING_TIME) { return meeting.getDate(); }
+        }
+        return null;
     }
 }
