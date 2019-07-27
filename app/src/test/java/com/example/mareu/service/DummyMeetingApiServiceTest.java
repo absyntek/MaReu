@@ -47,7 +47,7 @@ public class DummyMeetingApiServiceTest {
     }
 
     @Test
-    public void deletMeeting() {
+    public void deleteMeeting() {
         meeting = mApiService.getMeetings().get(0);
         mApiService.deletMeeting(meeting);
         assertFalse(mApiService.getMeetings().contains(meeting) );

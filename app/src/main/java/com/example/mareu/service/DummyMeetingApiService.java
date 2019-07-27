@@ -2,6 +2,7 @@ package com.example.mareu.service;
 
 import com.example.mareu.model.Meeting;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,6 +36,22 @@ public class DummyMeetingApiService implements MeetingApiService {
     @Override
     public String[] getMeetingPoints() {
         return mMeetingPoints;
+    }
+
+    public static class MeetingComparatorTime implements Comparator<Meeting>{
+
+        @Override
+        public int compare(Meeting meeting, Meeting t1) {
+            return meeting.getDate().compareTo(t1.getDate());
+        }
+    }
+
+    public static class MeetingComparatorRoom implements Comparator<Meeting>{
+
+        @Override
+        public int compare(Meeting meeting, Meeting t1) {
+            return meeting.getMeetingPoint().compareTo(t1.getMeetingPoint());
+        }
     }
 
     @Override

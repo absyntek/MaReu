@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.Stack;
 
 public class RandomColors {
+
+
     private Stack<Integer> recycle, colors;
 
     public RandomColors(Context context) {

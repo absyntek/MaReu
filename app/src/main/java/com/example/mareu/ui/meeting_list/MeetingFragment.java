@@ -22,6 +22,7 @@ import com.example.mareu.R;
 import com.example.mareu.di.DI;
 import com.example.mareu.events.DeleteMeetingEvent;
 import com.example.mareu.model.Meeting;
+import com.example.mareu.service.DummyMeetingApiService;
 import com.example.mareu.service.MeetingApiService;
 
 import org.greenrobot.eventbus.EventBus;
@@ -85,10 +86,10 @@ public class MeetingFragment extends Fragment {
         if (mSortBy != null) {
             switch (mSortBy) {
                 case "ROOM":
-                    Collections.sort(mMeetingList, new Meeting.MeetingComparatorRoom());
+                    Collections.sort(mMeetingList, new DummyMeetingApiService.MeetingComparatorRoom());
                     break;
                 case "DATE":
-                    Collections.sort(mMeetingList, new Meeting.MeetingComparatorTime());
+                    Collections.sort(mMeetingList, new DummyMeetingApiService.MeetingComparatorTime());
                     break;
                 case "NONE":
                     break;
