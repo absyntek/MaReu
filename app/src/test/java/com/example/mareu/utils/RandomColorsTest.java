@@ -18,24 +18,19 @@ import static org.junit.Assert.*;
 public class RandomColorsTest {
 
 
-    private Context mContext;
-    private Resources mResources;
-
-    private RandomColors mRandomColors;
-
     Integer[] test = {1,2,3,4,5};
 
     @Test
     public void getColor() {
         int[] test2 = Arrays.stream(test).mapToInt(Integer::intValue).toArray();
-        mContext = Mockito.mock(Context.class);
-        mResources = Mockito.mock(Resources.class);
-        Mockito.when(mContext.getResources()).thenReturn(mResources);
-        Mockito.when(mResources.getIntArray(Mockito.anyInt())).thenReturn(test2);
+        Context context = Mockito.mock(Context.class);
+        Resources resources = Mockito.mock(Resources.class);
+        Mockito.when(context.getResources()).thenReturn(resources);
+        Mockito.when(resources.getIntArray(Mockito.anyInt())).thenReturn(test2);
 
-        mRandomColors = new RandomColors(mContext);
+        RandomColors randomColors = new RandomColors(context);
 
-        int result = mRandomColors.getColor();
+        int result = randomColors.getColor();
         assertTrue(Arrays.asList(test).contains(result));
     }
 }

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -34,10 +33,10 @@ import java.util.List;
 
 public class MeetingFragment extends Fragment {
 
-    protected RecyclerView mRecyclerView;
-    protected MeetingApiService mMeetingApiService;
-    List<Meeting> mMeetingList;
-    String mSortBy = "NONE";
+    private RecyclerView mRecyclerView;
+    private MeetingApiService mMeetingApiService;
+    private List<Meeting> mMeetingList;
+    private String mSortBy = "NONE";
 
 
     public MeetingFragment() {

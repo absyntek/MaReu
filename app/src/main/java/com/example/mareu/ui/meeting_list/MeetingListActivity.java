@@ -18,8 +18,6 @@ import android.view.MenuItem;
 
 public class MeetingListActivity extends AppCompatActivity {
 
-    private MeetingFragment mMeetingFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,22 +27,19 @@ public class MeetingListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent( view.getContext() , NewMeetingActivity.class );
-                view.getContext().startActivity(intent);
-            }
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent( view.getContext() , NewMeetingActivity.class );
+            view.getContext().startActivity(intent);
         });
         configureAndShowFragment();
     }
 
     private void configureAndShowFragment(){
-        mMeetingFragment = (MeetingFragment) getSupportFragmentManager().findFragmentById(R.id.container);
-        if (mMeetingFragment == null){
-            mMeetingFragment = new MeetingFragment();
+        MeetingFragment meetingFragment = (MeetingFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+        if (meetingFragment == null){
+            meetingFragment = new MeetingFragment();
 
-            getSupportFragmentManager().beginTransaction().add(R.id.container,mMeetingFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.container, meetingFragment).commit();
         }
     }
 

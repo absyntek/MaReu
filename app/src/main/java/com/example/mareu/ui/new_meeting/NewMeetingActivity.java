@@ -21,16 +21,13 @@ import com.example.mareu.service.MeetingApiService;
 import com.example.mareu.utils.RandomColors;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,19 +36,22 @@ import butterknife.ButterKnife;
 
 public class NewMeetingActivity extends AppCompatActivity {
 
-    MeetingApiService mMeetingApiService;
-    Meeting mMeeting;
-    protected RandomColors mRandomColors;
-    SimpleDateFormat dateFormat;
+    private MeetingApiService mMeetingApiService;
+    private Meeting mMeeting;
+    private RandomColors mRandomColors;
+    private SimpleDateFormat dateFormat;
 
-    List<Meeting> mMeetings;
-    String mRoom,mTuto;
-    List<String> mEmailList;
-    int mHour,mMinutes,mMeetingID;
-    boolean mIsItNew;
-    Date mDate;
+    private List<Meeting> mMeetings;
+    private String mRoom;
+    private String mTuto;
+    private List<String> mEmailList;
+    private int mHour;
+    private int mMinutes;
+    private int mMeetingID;
+    private boolean mIsItNew;
+    private Date mDate;
 
-    final static long MEETING_TIME = 3602000;
+    private final static long MEETING_TIME = 3602000;
 
     @BindView(R.id.tvMeetingTime)
     EditText mMeetingTime;
@@ -80,7 +80,7 @@ public class NewMeetingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_meeting);
         ButterKnife.bind(this);
         mDate = new Date();
-        dateFormat = new SimpleDateFormat ("H'h'mm");
+        dateFormat = new SimpleDateFormat ("H'h'mm", Locale.FRENCH);
 
         mMeetingApiService = DI.getServiceMeet();
         mMeetings = mMeetingApiService.getMeetings();
@@ -151,29 +151,26 @@ public class NewMeetingActivity extends AppCompatActivity {
         /**
          * Validation button
          */
-        mbtnValidNewMeeting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isItPossible(mDate) != null){
-                    showToast("Tu à déjas une reunion à " + (dateFormat.format(isItPossible(mDate))));
-                }else if (mtvTuto.getText().length() == 0){
-                    showToast("n'oubliez pas le sujet de la réunion");
-                }else if (mEmailList.isEmpty()) {
-                    showToast("une réunion tout seul !! étrange");
-                }else if (mEmailList.size()<3){
-                    showToast("il faut au moin 3 participant");
-                } else {
-                        mRandomColors = new RandomColors(view.getContext());
-                        mTuto = mtvTuto.getText().toString();
-                        mMeeting = new Meeting(mDate,mRoom,mTuto,mEmailList,mRandomColors.getColor());
-                        saveMeetingAndBack();
-                }
+        mbtnValidNewMeeting.setOnClickListener(view -> {
+            if (isItPossible(mDate) != null){
+                showToast("Tu à déjas une reunion à " + (dateFormat.format(isItPossible(mDate))));
+            }else if (mtvTuto.getText().length() == 0){
+                showToast("n'oubliez pas le sujet de la réunion");
+            }else if (mEmailList.isEmpty()) {
+                showToast("une réunion tout seul !! étrange");
+            }else if (mEmailList.size()<3){
+                showToast("il faut au moin 3 participant");
+            } else {
+                    mRandomColors = new RandomColors(view.getContext());
+                    mTuto = mtvTuto.getText().toString();
+                    mMeeting = new Meeting(mDate,mRoom,mTuto,mEmailList,mRandomColors.getColor());
+                    saveMeetingAndBack();
             }
         });
     }
 
     private void configSpinnerRoom(){
-        ArrayAdapter<String> dataAdapterR = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mMeetingApiService.getMeetingPoints());
+        ArrayAdapter<String> dataAdapterR = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mMeetingApiService.getMeetingPoints());
         dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerRoom.setAdapter(dataAdapterR);
     }
@@ -219,7 +216,7 @@ public class NewMeetingActivity extends AppCompatActivity {
     }
 
     private void configListViewEmail (){
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, mEmailList);
         mListViewEmail.setAdapter(adapter);
     }

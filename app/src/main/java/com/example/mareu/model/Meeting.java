@@ -88,7 +88,7 @@ public class Meeting {
         mMeetingColor = meetingColor;
     }
 
-    public static class MeetingComparatorTime implements Comparator<Meeting>{
+    private static class MeetingComparatorTime implements Comparator<Meeting>{
 
         @Override
         public int compare(Meeting meeting, Meeting t1) {
@@ -96,7 +96,7 @@ public class Meeting {
         }
     }
 
-    public static class MeetingComparatorRoom implements Comparator<Meeting>{
+    private static class MeetingComparatorRoom implements Comparator<Meeting>{
 
         @Override
         public int compare(Meeting meeting, Meeting t1) {

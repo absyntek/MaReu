@@ -21,6 +21,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,8 +29,8 @@ import butterknife.ButterKnife;
 
 public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeetingRecyclerViewAdapter.ViewHolder> {
 
-    private List<Meeting> mMeetingList;
-    protected MeetingApiService mMeetingApiService;
+    private final List<Meeting> mMeetingList;
+    private MeetingApiService mMeetingApiService;
 
 
     public MyMeetingRecyclerViewAdapter(List<Meeting> items) {
@@ -50,25 +51,17 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
         holder.mItemAvatar.setColorFilter(meeting.getMeetingColor());
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat ("H'h'mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat ("H'h'mm", Locale.FRENCH);
         String mTimeMeeting =  dateFormat.format(meeting.getDate());
         holder.mtvInfoMeeting.setText(meeting.getTuto() + " - " + mTimeMeeting + " - " + meeting.getMeetingPoint());
         holder.mtvEmailMeeting.setText(meeting.getEmails().toString());
 
-        holder.mDeleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EventBus.getDefault().post(new DeleteMeetingEvent(meeting));
-            }
-        });
+        holder.mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteMeetingEvent(meeting)));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), NewMeetingActivity.class);
-                intent.putExtra("idMeeting",mMeetingApiService.getMeetingID(mMeetingList.get(position)));
-                v.getContext().startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), NewMeetingActivity.class);
+            intent.putExtra("idMeeting",mMeetingApiService.getMeetingID(mMeetingList.get(position)));
+            v.getContext().startActivity(intent);
         });
     }
 
@@ -91,7 +84,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
         @BindView(R.id.item_list_delete_button)
         public ImageButton mDeleteButton;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

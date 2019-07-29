@@ -8,10 +8,10 @@ import java.util.Objects;
 
 public class DummyMeetingApiService implements MeetingApiService {
 
-    private String[] mMeetingPoints =
+    private final String[] mMeetingPoints =
             {"Peach", "Mario", "Luigi", "Yoshi", "Toad", "Wario", "Princesse", "Bowser", "KoopaTroopa", "DonkeyKong"};
 
-    private List<Meeting> mMeetingList = DummyMeetingGenerator.generateMeetings();
+    private final List<Meeting> mMeetingList = DummyMeetingGenerator.generateMeetings();
 
     @Override
     public List<Meeting> getMeetings() {
