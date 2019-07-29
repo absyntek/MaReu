@@ -3,7 +3,6 @@ package com.example.mareu.ui.meeting_list;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.espresso.intent.matcher.IntentMatchers;
-import androidx.test.espresso.internal.inject.InstrumentationContext;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -13,6 +12,7 @@ import com.example.mareu.R;
 import com.example.mareu.ui.meeting_list.utils.DeleteViewAction;
 import com.example.mareu.ui.new_meeting.NewMeetingActivity;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,10 +25,12 @@ import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToHolder;
 import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static com.example.mareu.ui.meeting_list.utils.RecyclerViewItemCountAssertion.withItemCount;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AllOf.allOf;
@@ -70,20 +72,4 @@ public class MeetingListActivityTest {
 
         Intents.intended(IntentMatchers.hasComponent(NewMeetingActivity.class.getName()));
     }
-
-    @Test
-    public void meetingListActivity_SortByDate(){
-        Date item1;
-        Date item2;
-        Date item3;
-
-        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
-        onView(withId(R.id.sort_by_name)).perform(click());
-    }
-
-    @Test
-    public void meetingListActivity_SortByPlace (){
-
-    }
-
 }

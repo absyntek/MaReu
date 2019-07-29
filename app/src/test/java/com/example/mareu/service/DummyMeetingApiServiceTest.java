@@ -23,7 +23,6 @@ public class DummyMeetingApiServiceTest {
 
     private MeetingApiService mApiService;
     private Meeting meeting;
-    int SIZE = 3;
 
     @Before
     public void setup(){
