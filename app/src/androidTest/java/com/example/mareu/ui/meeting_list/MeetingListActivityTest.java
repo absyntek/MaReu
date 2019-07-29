@@ -58,7 +58,7 @@ public class MeetingListActivityTest {
     }
 
     @Test
-    public void meetingListActivity_eleteAction_shouldRemoveItem() {
+    public void meetingListActivity_deleteAction_shouldRemoveItem() {
         onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT));
         onView(allOf(withId(R.id.list), isDisplayed())).perform(actionOnItemAtPosition(1, new DeleteViewAction()));
         onView(withId(R.id.list)).check(withItemCount(ITEMS_COUNT - 1));
