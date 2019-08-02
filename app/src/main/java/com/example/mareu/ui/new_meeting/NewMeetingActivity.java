@@ -86,7 +86,7 @@ public class NewMeetingActivity extends AppCompatActivity {
         mMeetings = mMeetingApiService.getMeetings();
         mEmailList = new ArrayList<>();
 
-        mIsItNew = isItNew(); //TODO c'est mieu de le faire qu'une fois ..??
+        mIsItNew = isItNew();
 
         if (!mIsItNew){
             mMeeting = mMeetings.get(mMeetingID);
