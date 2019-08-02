@@ -8,6 +8,9 @@ import java.util.Objects;
 
 public class DummyMeetingApiService implements MeetingApiService {
 
+    /**
+     * Meeting point list
+     */
     private final String[] mMeetingPoints =
             {"Peach", "Mario", "Luigi", "Yoshi", "Toad", "Wario", "Princesse", "Bowser", "KoopaTroopa", "DonkeyKong"};
 

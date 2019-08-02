@@ -68,7 +68,7 @@ public class MeetingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meeting_list, container, false);
 
-        // Set the adapter
+        // Set up the Layout
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
@@ -96,6 +96,7 @@ public class MeetingFragment extends Fragment {
                     break;
             }
         }
+        // Set up Adapter
         mRecyclerView.setAdapter(new MyMeetingRecyclerViewAdapter(mMeetingList));
 
     }
