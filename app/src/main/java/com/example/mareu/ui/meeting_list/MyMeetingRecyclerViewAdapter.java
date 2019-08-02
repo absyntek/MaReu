@@ -3,6 +3,7 @@ package com.example.mareu.ui.meeting_list;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,7 +54,8 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
         SimpleDateFormat dateFormat = new SimpleDateFormat ("H'h'mm", Locale.FRENCH);
         String mTimeMeeting =  dateFormat.format(meeting.getDate());
-        holder.mtvInfoMeeting.setText(meeting.getTuto() + " - " + mTimeMeeting + " - " + meeting.getMeetingPoint());
+        String infoMeet = meeting.getTuto() + " - " + mTimeMeeting + " - " + meeting.getMeetingPoint();
+        holder.mtvInfoMeeting.setText(infoMeet);
         holder.mtvEmailMeeting.setText(meeting.getEmails().toString());
 
         holder.mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteMeetingEvent(meeting)));
