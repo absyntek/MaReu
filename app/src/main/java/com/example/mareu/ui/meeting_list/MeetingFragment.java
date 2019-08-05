@@ -48,6 +48,9 @@ public class MeetingFragment extends Fragment {
         return new MeetingFragment();
     }
 
+    /**
+     * receive Sort type
+     */
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() { //TODO est-il possible d'éviter cela ??
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -58,17 +61,18 @@ public class MeetingFragment extends Fragment {
         }
     };
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mBroadcastReceiver, new IntentFilter("SORT_ACTION"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mBroadcastReceiver, new IntentFilter("SORT_ACTION"));  // SetUp receiver
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meeting_list, container, false);
 
-        // Set up the Layout
+        // Prepar RecyclerView and Set up the Layout
         mRecyclerView = (RecyclerView) view;
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));

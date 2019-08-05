@@ -62,6 +62,7 @@ public class MeetingListActivity extends AppCompatActivity {
                 break;
 
         }
+        // Send the Sort type to the fragment
         LocalBroadcastManager.getInstance(MeetingListActivity.this).sendBroadcast(intent);
         return super.onOptionsItemSelected(item);
     }

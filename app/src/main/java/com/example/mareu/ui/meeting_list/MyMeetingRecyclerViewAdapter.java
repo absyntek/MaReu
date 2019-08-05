@@ -57,7 +57,10 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
         String mTimeMeeting =  dateFormat.format(meeting.getDate());
         String infoMeet = meeting.getTuto() + " - " + mTimeMeeting + " - " + meeting.getMeetingPoint();
         holder.mtvInfoMeeting.setText(infoMeet);
-        holder.mtvEmailMeeting.setText(meeting.getEmails().toString());
+
+        holder.mtvEmailMeeting.setText(meeting.getEmails().toString()
+                .replace("[","")
+                .replace("]",""));
 
         holder.mDeleteButton.setOnClickListener(v -> EventBus.getDefault().post(new DeleteMeetingEvent(meeting)));
 
