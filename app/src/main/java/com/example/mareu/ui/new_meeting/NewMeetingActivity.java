@@ -160,7 +160,7 @@ public class NewMeetingActivity extends AppCompatActivity {
             }else if (mEmailList.isEmpty()) {
                 showToast("une réunion tout seul !! étrange");
             }else if (mEmailList.size()<2){
-                showToast("il faut au moin 3 participant");
+                showToast("il faut au moin 2 participant");
             } else {
                     mRandomColors = new RandomColors(view.getContext());
                     mTuto = mtvTuto.getText().toString();
