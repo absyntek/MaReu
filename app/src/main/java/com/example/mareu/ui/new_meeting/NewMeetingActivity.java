@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -158,7 +159,7 @@ public class NewMeetingActivity extends AppCompatActivity {
                 showToast("n'oubliez pas le sujet de la réunion");
             }else if (mEmailList.isEmpty()) {
                 showToast("une réunion tout seul !! étrange");
-            }else if (mEmailList.size()<3){
+            }else if (mEmailList.size()<2){
                 showToast("il faut au moin 3 participant");
             } else {
                     mRandomColors = new RandomColors(view.getContext());
@@ -188,6 +189,18 @@ public class NewMeetingActivity extends AppCompatActivity {
         mtvTuto.setText(mMeeting.getTuto());
         mEmailList = mMeeting.getEmails();
         configListViewEmail();
+
+        //TODO : Fix it
+        mListViewEmail.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                ArrayList tmp = new ArrayList(mEmailList);
+                tmp.remove(pos);
+                mEmailList = new ArrayList<>(tmp);
+                configListViewEmail();
+                return true;
+            }
+        });
     }
 
     private void saveMeetingAndBack(){

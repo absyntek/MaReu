@@ -36,6 +36,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
     public MyMeetingRecyclerViewAdapter(List<Meeting> items) {
         mMeetingList = items;
+        mMeetingApiService = DI.getServiceMeet();
     }
 
     @NonNull
@@ -48,7 +49,6 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        mMeetingApiService = DI.getServiceMeet();
         Meeting meeting = mMeetingList.get(position);
 
         holder.mItemAvatar.setColorFilter(meeting.getMeetingColor());

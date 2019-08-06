@@ -22,7 +22,6 @@ public class MeetingListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -30,6 +29,7 @@ public class MeetingListActivity extends AppCompatActivity {
             Intent intent = new Intent( view.getContext() , NewMeetingActivity.class );
             view.getContext().startActivity(intent);
         });
+
         configureAndShowFragment();
     }
 
@@ -60,7 +60,6 @@ public class MeetingListActivity extends AppCompatActivity {
             case R.id.sort_by_date:
                 intent.putExtra("SORTBY", "DATE");
                 break;
-
         }
         // Send the Sort type to the fragment
         LocalBroadcastManager.getInstance(MeetingListActivity.this).sendBroadcast(intent);
