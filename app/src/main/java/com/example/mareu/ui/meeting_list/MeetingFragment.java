@@ -76,7 +76,7 @@ public class MeetingFragment extends Fragment {
     /**
      * receive Sort type
      */
-    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() { //TODO est-il possible d'éviter cela ??
+    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals("SORT_ACTION")){
