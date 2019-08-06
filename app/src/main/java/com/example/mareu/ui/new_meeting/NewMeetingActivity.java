@@ -116,8 +116,8 @@ public class NewMeetingActivity extends AppCompatActivity {
             mTimePicker.show();
         });
 
-        /**
-         * List of meeting rooms
+        /*
+          List of meeting rooms
          */
         mSpinnerRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -131,8 +131,8 @@ public class NewMeetingActivity extends AppCompatActivity {
             }
         });
 
-        /**
-         * Add Email button
+        /*
+          Add Email button
          */
         mfabAddEmail.setOnClickListener(view -> {
             if (mtvAddEmail.getText().length() == 0){
@@ -149,8 +149,8 @@ public class NewMeetingActivity extends AppCompatActivity {
             }
         });
 
-        /**
-         * Validation button
+        /*
+          Validation button
          */
         mbtnValidNewMeeting.setOnClickListener(view -> {
             if (isItPossible(mDate) != null){
@@ -190,7 +190,6 @@ public class NewMeetingActivity extends AppCompatActivity {
         mEmailList = mMeeting.getEmails();
         configListViewEmail();
 
-        //TODO : Fix it
         mListViewEmail.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long l) {
@@ -234,6 +233,10 @@ public class NewMeetingActivity extends AppCompatActivity {
         mListViewEmail.setAdapter(adapter);
     }
 
+    /*
+    If Meeting time is beetwin 1H02min the last one
+    we return this meeting to tell customer he already have meeting at this time
+     */
     private Date isItPossible (Date timeToCheck){
 
         for (Meeting meeting : mMeetings) {
