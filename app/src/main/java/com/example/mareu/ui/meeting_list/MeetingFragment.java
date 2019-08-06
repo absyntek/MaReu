@@ -47,21 +47,7 @@ public class MeetingFragment extends Fragment {
     public static MeetingFragment newInstance() {
         return new MeetingFragment();
     }
-
-    /**
-     * receive Sort type
-     */
-    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() { //TODO est-il possible d'éviter cela ??
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("SORT_ACTION")){
-                mSortBy = intent.getStringExtra("SORTBY");
-            }
-            initList();
-        }
-    };
-
-
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +72,19 @@ public class MeetingFragment extends Fragment {
         initList();
         super.onActivityCreated(savedInstanceState);
     }
+
+    /**
+     * receive Sort type
+     */
+    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() { //TODO est-il possible d'éviter cela ??
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("SORT_ACTION")){
+                mSortBy = intent.getStringExtra("SORTBY");
+            }
+            initList();
+        }
+    };
 
     private void initList (){
         if (mSortBy != null) {

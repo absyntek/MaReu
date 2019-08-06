@@ -96,12 +96,13 @@ public class NewMeetingActivity extends AppCompatActivity {
 
         configSpinnerRoom();
 
+        Calendar mcurrentTime = Calendar.getInstance();
+        mHour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        mMinutes = mcurrentTime.get(Calendar.MINUTE);
+        String actualTime = (mHour+":"+mMinutes);
+        mMeetingTime.setText(actualTime);
+
         mMeetingTime.setOnClickListener(view -> {
-
-            Calendar mcurrentTime = Calendar.getInstance();
-            mHour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-            mMinutes = mcurrentTime.get(Calendar.MINUTE);
-
             TimePickerDialog mTimePicker;
             mTimePicker = new TimePickerDialog(NewMeetingActivity.this, (timePicker, selectedHour, selectedMinute) -> {
 
