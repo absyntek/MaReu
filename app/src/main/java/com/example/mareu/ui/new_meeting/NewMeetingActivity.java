@@ -115,6 +115,9 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+    /*
+      Initialise all variables
+     */
     private void configVars() {
         mDate = null;
         mSimpleDateFormat = new SimpleDateFormat("MM/dd/yyyy H'h'mm", Locale.FRENCH);
@@ -125,6 +128,9 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
         mActualDate = mcurrentTime.getTime();
     }
 
+    /*
+     Check if we make a new meeting or modifie one
+     */
     private boolean isItNew(){
         Intent intent = getIntent();
         if (intent == null){ return true; }
@@ -132,6 +138,9 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
         return mMeetingID == -1;
     }
 
+    /*
+      If modifie meeting set ui elements
+     */
     private void setUiIfEdit(){
         mColor = mMeeting.getMeetingColor();
         mDate = mMeeting.getDate();
@@ -142,12 +151,18 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
         configListViewEmail();
     }
 
+    /*
+      Add the list of meeting room to the spinner
+     */
     private void configAndSetUpSpinnerRoom(){
         ArrayAdapter<String> dataAdapterR = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mMeetingApiService.getMeetingPoints());
         dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerRoom.setAdapter(dataAdapterR);
     }
 
+    /*
+     Prepare listener for select the date and time for the meeting
+     */
     private void setUpDateListener(){
         mMeetingDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -180,6 +195,9 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
         }
     };
 
+    /*
+      Listner when valid on keybord add new Chip and mail to the list
+     */
     private void setUpMailButton(){
         mtvAddEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -195,6 +213,9 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
+    /*
+      Check all condition before save the meeting into api
+     */
     private void setUpValidButton(){
         mbtnValidNewMeeting.setOnClickListener(view -> {
 
@@ -222,6 +243,9 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
+    /*
+      Save the meeting on API and back to MainActivity
+     */
     private void saveMeetingAndBack(){
         if (!mIsItNew){
             mMeetings.remove(mMeetingID);
@@ -240,9 +264,7 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
 
     // --------- UTLIS --------- //
 
-    /*
-    Check email form is valide
-     */
+    /* Check email form is valide */
     private boolean checkEmailValid (String email){
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(email);
@@ -254,20 +276,19 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
         return mat.matches();
     }
 
+    /* ShortCut for showtoast */
     private void showToast (String messageToShow){
         Toast.makeText(this,messageToShow,Toast.LENGTH_SHORT).show();
     }
 
+    /* If editing meeting populate the ChipView */
     private void configListViewEmail (){
         for (String email : mEmailList){
             creatChip(email);
         }
     }
 
-    /*
-    If Meeting time is beetwin 1H02min the last one
-    we return this meeting to tell customer he already have meeting at this time
-     */
+    /* If Meeting time is beetwin 1H02min the last one we return this meeting to tell customer he already have meeting at this time */
     private Date isItPossible (Date timeToCheck){
         for (Meeting meeting : mMeetings) {
             if (!mIsItNew && !meeting.equals(mMeeting)){
@@ -278,6 +299,7 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
         return null;
     }
 
+    /* Creat new Chip */
     private void creatChip (String email){
         Chip chip = new Chip(this);
         chip.setText(email);
