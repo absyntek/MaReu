@@ -1,18 +1,26 @@
 package com.example.mareu.ui.new_meeting;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.Spanned;
+import android.text.TextWatcher;
+import android.text.style.ImageSpan;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mareu.R;
@@ -20,7 +28,12 @@ import com.example.mareu.di.DI;
 import com.example.mareu.model.Meeting;
 import com.example.mareu.service.MeetingApiService;
 import com.example.mareu.utils.RandomColors;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipDrawable;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,77 +42,119 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NewMeetingActivity extends AppCompatActivity {
+public class NewMeetingActivity extends AppCompatActivity implements View.OnClickListener{
 
     private MeetingApiService mMeetingApiService;
     private Meeting mMeeting;
     private RandomColors mRandomColors;
     private SimpleDateFormat dateFormat;
+    private Calendar mcurrentTime;
+    private Context mContext;
 
     private List<Meeting> mMeetings;
-    private String mRoom;
-    private String mTuto;
     private List<String> mEmailList;
-    private int mHour;
-    private int mMinutes;
-    private int mMeetingID;
+    private String mRoom, mTuto;
+    private int mHour, mMinutes, mMeetingID;
     private boolean mIsItNew;
-    private Date mDate;
+    private Date mDate, mActualDate;
 
     private final static long MEETING_TIME = 3602000;
 
     @BindView(R.id.tvMeetingTime)
-    EditText mMeetingTime;
+    TextInputEditText mMeetingTime;
 
     @BindView(R.id.spinnerRoom)
-    Spinner mSpinnerRoom;
+    MaterialBetterSpinner mSpinnerRoom;
 
     @BindView(R.id.tvTuto)
-    EditText mtvTuto;
+    TextInputEditText mtvTuto;
 
     @BindView(R.id.tvAddEmail)
-    EditText mtvAddEmail;
-
-    @BindView(R.id.fabAddEmail)
-    FloatingActionButton mfabAddEmail;
+    TextInputEditText mtvAddEmail;
 
     @BindView(R.id.btnValidNewMeeting)
     Button mbtnValidNewMeeting;
 
-    @BindView(R.id.listViewEmail)
-    ListView mListViewEmail;
+    @BindView(R.id.chipGroupEmail)
+    ChipGroup mChipGroup;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_meeting);
         ButterKnife.bind(this);
+
+        configVars();
+
+        mIsItNew = isItNew();      // Check if we modifying a meeting or macking new one
+        if (!mIsItNew){
+            mMeeting = mMeetings.get(mMeetingID);
+            setUiIfEdit();
+        }
+
+        configAndSetUpSpinnerRoom();
+
+        setUpTimePicker();
+
+        setUpMailButton();
+
+        setUpValidButton();
+
+    }
+
+    private void configVars() {
         mDate = new Date();
         dateFormat = new SimpleDateFormat ("H'h'mm", Locale.FRENCH);
-
         mMeetingApiService = DI.getServiceMeet();
         mMeetings = mMeetingApiService.getMeetings();
         mEmailList = new ArrayList<>();
+        mcurrentTime = Calendar.getInstance();
+        mActualDate = mcurrentTime.getTime();
+        mContext = this;
+    }
 
-        mIsItNew = isItNew();
+    private boolean isItNew(){
+        Intent intent = getIntent();
+        if (intent == null){ return true; }
+        else {mMeetingID = intent.getIntExtra("idMeeting",-1);}
+        return mMeetingID == -1;
+    }
 
-        if (!mIsItNew){
-            mMeeting = mMeetings.get(mMeetingID);
-            setUI();
-        }
+    private void setUiIfEdit(){
+        mMeetingTime.setText(dateFormat.format(mMeeting.getDate()));
+        mSpinnerRoom.setText(mMeeting.getMeetingPoint());
+        mtvTuto.setText(mMeeting.getTuto());
+        mEmailList = mMeeting.getEmails();
+        configListViewEmail();
+    }
 
-        configSpinnerRoom();
+    private void configAndSetUpSpinnerRoom(){
+        ArrayAdapter<String> dataAdapterR = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mMeetingApiService.getMeetingPoints());
+        dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerRoom.setAdapter(dataAdapterR);
 
-        Calendar mcurrentTime = Calendar.getInstance();
-        Date actualDate = mcurrentTime.getTime();
-        mMeetingTime.setText(dateFormat.format(actualDate));
+        mSpinnerRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                mRoom = mSpinnerRoom.getText().toString();
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                showToast("tu compte faire ta réu dans les couloirs ??");
+            }
+        });
+    }
+
+    private void setUpTimePicker(){
         mMeetingTime.setOnClickListener(view -> {
             TimePickerDialog mTimePicker;
             mHour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
@@ -111,51 +166,33 @@ public class NewMeetingActivity extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                assert mDate != null;
                 mMeetingTime.setText( dateFormat.format(mDate));
             }, mHour, mMinutes, true);
             mTimePicker.setTitle("Selectionez l'heure");
             mTimePicker.show();
         });
+    }
 
-        /*
-          List of meeting rooms
-         */
-        mSpinnerRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void setUpMailButton(){
+        mtvAddEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mRoom = String.valueOf(mSpinnerRoom.getSelectedItem());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                showToast("tu compte faire ta réu dans les couloirs ??");
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE && checkEmailValid(mtvAddEmail.getText().toString())){
+                    creatChip(mtvAddEmail.getText().toString());
+                    mEmailList.add(mtvAddEmail.getText().toString());
+                    mtvAddEmail.getText().clear();
+                    return true;
+                }
+                return false;
             }
         });
+    }
 
-        /*
-          Add Email button
-         */
-        mfabAddEmail.setOnClickListener(view -> {
-            if (mtvAddEmail.getText().length() == 0){
-                showToast("Vous n'avez pas entrer d'adresse Mail");
-            }else if(!checkEmailValid(mtvAddEmail.getText().toString())){
-                showToast("Ceci n'est pas une adresse Mail");
-            }
-
-            else {
-                mEmailList.add(mtvAddEmail.getText().toString());
-                configListViewEmail();
-                showToast(mtvAddEmail.getText().toString() + "à bien été ajouté");
-                mtvAddEmail.getText().clear();
-            }
-        });
-
-        /*
-          Validation button
-         */
+    private void setUpValidButton(){
         mbtnValidNewMeeting.setOnClickListener(view -> {
             if (isItPossible(mDate) != null){
-                showToast("Tu à déjas une reunion à " + (dateFormat.format(isItPossible(mDate))));
+                showToast("Tu à déjas une reunion à " + (dateFormat.format(Objects.requireNonNull(isItPossible(mDate)))));
             }else if (mtvTuto.getText().length() == 0){
                 showToast("n'oubliez pas le sujet de la réunion");
             }else if (mEmailList.isEmpty()) {
@@ -163,42 +200,10 @@ public class NewMeetingActivity extends AppCompatActivity {
             }else if (mEmailList.size()<2){
                 showToast("il faut au moin 2 participant");
             } else {
-                    mRandomColors = new RandomColors(view.getContext());
-                    mTuto = mtvTuto.getText().toString();
-                    mMeeting = new Meeting(mDate,mRoom,mTuto,mEmailList,mRandomColors.getColor());
-                    saveMeetingAndBack();
-            }
-        });
-    }
-
-    private void configSpinnerRoom(){
-        ArrayAdapter<String> dataAdapterR = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mMeetingApiService.getMeetingPoints());
-        dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpinnerRoom.setAdapter(dataAdapterR);
-    }
-
-    private boolean isItNew(){
-        Intent intent = getIntent();
-        if (intent == null){ return true; }
-        else {mMeetingID = intent.getIntExtra("idMeeting",-1);}
-        return mMeetingID == -1;
-    }
-
-    private void setUI(){
-        mMeetingTime.setText(dateFormat.format(mMeeting.getDate()));
-        mSpinnerRoom.setPrompt(mMeeting.getMeetingPoint());
-        mtvTuto.setText(mMeeting.getTuto());
-        mEmailList = mMeeting.getEmails();
-        configListViewEmail();
-
-        mListViewEmail.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long l) {
-                ArrayList tmp = new ArrayList(mEmailList);
-                tmp.remove(pos);
-                mEmailList = new ArrayList<>(tmp);
-                configListViewEmail();
-                return true;
+                mRandomColors = new RandomColors(view.getContext());
+                mTuto = mtvTuto.getText().toString();
+                mMeeting = new Meeting(mDate,mRoom,mTuto,mEmailList,mRandomColors.getColor());
+                saveMeetingAndBack();
             }
         });
     }
@@ -218,9 +223,20 @@ public class NewMeetingActivity extends AppCompatActivity {
         }
     }
 
+
+    // --------- UTLIS --------- //
+
+    /*
+    Check email form is valide
+     */
     private boolean checkEmailValid (String email){
         Pattern pattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
         Matcher mat = pattern.matcher(email);
+        if (email.length() == 0){
+            showToast("il n'y à rien d'écrit");
+        }else if (!mat.matches()){
+            showToast("Cette adresse mail n'est pas valid");
+        }
         return mat.matches();
     }
 
@@ -229,9 +245,9 @@ public class NewMeetingActivity extends AppCompatActivity {
     }
 
     private void configListViewEmail (){
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, mEmailList);
-        mListViewEmail.setAdapter(adapter);
+        for (String email : mEmailList){
+            creatChip(email);
+        }
     }
 
     /*
@@ -245,5 +261,24 @@ public class NewMeetingActivity extends AppCompatActivity {
             if (different_milli<MEETING_TIME && different_milli> -MEETING_TIME) { return meeting.getDate(); }
         }
         return null;
+    }
+
+    private void creatChip (String email){
+        Chip chip = new Chip(this);
+        chip.setText(email);
+        chip.setCloseIconVisible(true);
+        chip.setCheckable(false);
+        chip.setClickable(false);
+        chip.setOnCloseIconClickListener(this);
+        mChipGroup.addView(chip);
+    }
+
+    @Override
+    public void onClick(View view) {
+        Chip chip = (Chip) view;
+        mChipGroup.removeView(chip);
+        ArrayList tmp = new ArrayList(mEmailList);
+        tmp.remove(chip.getText());
+        mEmailList = new ArrayList<>(tmp);
     }
 }

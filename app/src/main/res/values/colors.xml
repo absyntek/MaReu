@@ -3,6 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="chipIconTint">#D81B60</color>
 
     <color name="color_item1">#fff44336</color>
     <color name="color_item2">#ffe91e63</color>
