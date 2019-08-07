@@ -2,6 +2,7 @@ package com.example.mareu.ui.new_meeting;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.app.DatePickerDialog;
@@ -283,6 +284,7 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
         chip.setCloseIconVisible(true);
         chip.setCheckable(false);
         chip.setClickable(false);
+        chip.setChipIcon(ContextCompat.getDrawable(this,R.drawable.round_contact_mail_black_24dp));
         chip.setOnCloseIconClickListener(this);
         mChipGroup.addView(chip);
     }
