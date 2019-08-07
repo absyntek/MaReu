@@ -4,6 +4,7 @@ package com.example.mareu.model;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Model object representing a Meeting
@@ -102,5 +103,22 @@ public class Meeting {
         public int compare(Meeting meeting, Meeting t1) {
             return meeting.mMeetingPoint.compareTo(t1.mMeetingPoint);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Meeting meeting = (Meeting) o;
+        return mMeetingColor == meeting.mMeetingColor &&
+                Objects.equals(mDate, meeting.mDate) &&
+                Objects.equals(mMeetingPoint, meeting.mMeetingPoint) &&
+                Objects.equals(mTuto, meeting.mTuto) &&
+                Objects.equals(mEmails, meeting.mEmails);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mDate, mMeetingPoint, mTuto, mEmails, mMeetingColor);
     }
 }

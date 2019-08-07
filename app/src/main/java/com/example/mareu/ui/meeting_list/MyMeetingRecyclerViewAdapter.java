@@ -53,7 +53,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
         holder.mItemAvatar.setColorFilter(meeting.getMeetingColor());
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat ("H'h'mm", Locale.FRENCH);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy H'h'mm", Locale.FRENCH);
         String mTimeMeeting =  dateFormat.format(meeting.getDate());
         String infoMeet = meeting.getTuto() + " - " + mTimeMeeting + " - " + meeting.getMeetingPoint();
         holder.mtvInfoMeeting.setText(infoMeet);

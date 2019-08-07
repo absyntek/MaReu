@@ -9,10 +9,10 @@ import java.util.List;
 
 public abstract class DummyMeetingGenerator {
 
-    private static final Date sDate1 = new Date(2019,5,5,1,1,0);
-    private static final Date sDate2 = new Date(2019,5,5,20,1,0);
-    private static final Date sDate3 = new Date(2019,5,5,13,1,0);
-    private static final Date sDate4 = new Date(2019,5,5,15,1,0);
+    private static final Date sDate1 = new Date(119,5,5,1,1,0);
+    private static final Date sDate2 = new Date(119,5,5,20,1,0);
+    private static final Date sDate3 = new Date(119,5,5,13,1,0);
+    private static final Date sDate4 = new Date(119,5,5,15,1,0);
 
     private static final List<String> emailList = Arrays.asList("michel@lamzone.com","zebulon@lamzone.com","sarah@lamzone.com","jean-louis@lamzone.com");
 
@@ -23,6 +23,8 @@ public abstract class DummyMeetingGenerator {
             new Meeting(sDate3,"Yoshi","tuto - 3",emailList, -9159498)
 
     );
+
+    protected DummyMeetingGenerator() { }
 
     static List<Meeting> generateMeetings () {
         return new ArrayList<>(DUMMY_MEETINGS);

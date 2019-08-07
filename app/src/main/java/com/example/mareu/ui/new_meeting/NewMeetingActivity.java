@@ -3,6 +3,7 @@ package com.example.mareu.ui.new_meeting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,10 +18,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.mareu.R;
@@ -54,21 +57,20 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
     private MeetingApiService mMeetingApiService;
     private Meeting mMeeting;
     private RandomColors mRandomColors;
-    private SimpleDateFormat dateFormat;
+    private SimpleDateFormat mSimpleDateFormat;
     private Calendar mcurrentTime;
-    private Context mContext;
 
     private List<Meeting> mMeetings;
     private List<String> mEmailList;
     private String mRoom, mTuto;
-    private int mHour, mMinutes, mMeetingID;
+    private int mMeetingID,mColor;
     private boolean mIsItNew;
     private Date mDate, mActualDate;
 
     private final static long MEETING_TIME = 3602000;
 
-    @BindView(R.id.tvMeetingTime)
-    TextInputEditText mMeetingTime;
+    @BindView(R.id.tvMeetingDate)
+    TextInputEditText mMeetingDate;
 
     @BindView(R.id.spinnerRoom)
     MaterialBetterSpinner mSpinnerRoom;
@@ -91,34 +93,32 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_meeting);
         ButterKnife.bind(this);
-
         configVars();
 
         mIsItNew = isItNew();      // Check if we modifying a meeting or macking new one
         if (!mIsItNew){
             mMeeting = mMeetings.get(mMeetingID);
             setUiIfEdit();
+        }else {
+            mRandomColors = new RandomColors(this);
+            mColor = mRandomColors.getColor();
         }
 
         configAndSetUpSpinnerRoom();
-
-        setUpTimePicker();
-
+        setUpDateListener();
         setUpMailButton();
-
         setUpValidButton();
 
     }
 
     private void configVars() {
-        mDate = new Date();
-        dateFormat = new SimpleDateFormat ("H'h'mm", Locale.FRENCH);
+        mDate = null;
+        mSimpleDateFormat = new SimpleDateFormat("MM/dd/yyyy H'h'mm", Locale.FRENCH);
         mMeetingApiService = DI.getServiceMeet();
         mMeetings = mMeetingApiService.getMeetings();
         mEmailList = new ArrayList<>();
         mcurrentTime = Calendar.getInstance();
         mActualDate = mcurrentTime.getTime();
-        mContext = this;
     }
 
     private boolean isItNew(){
@@ -129,7 +129,9 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void setUiIfEdit(){
-        mMeetingTime.setText(dateFormat.format(mMeeting.getDate()));
+        mColor = mMeeting.getMeetingColor();
+        mDate = mMeeting.getDate();
+        mMeetingDate.setText(mSimpleDateFormat.format(mMeeting.getDate()));
         mSpinnerRoom.setText(mMeeting.getMeetingPoint());
         mtvTuto.setText(mMeeting.getTuto());
         mEmailList = mMeeting.getEmails();
@@ -140,39 +142,39 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
         ArrayAdapter<String> dataAdapterR = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mMeetingApiService.getMeetingPoints());
         dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerRoom.setAdapter(dataAdapterR);
+    }
 
-        mSpinnerRoom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void setUpDateListener(){
+        mMeetingDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                mRoom = mSpinnerRoom.getText().toString();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                showToast("tu compte faire ta réu dans les couloirs ??");
+            public void onClick(View view) {
+                new DatePickerDialog(NewMeetingActivity.this, mDateDataSet, mcurrentTime.get(Calendar.YEAR),
+                        mcurrentTime.get(Calendar.MONTH), mcurrentTime.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
     }
 
-    private void setUpTimePicker(){
-        mMeetingTime.setOnClickListener(view -> {
-            TimePickerDialog mTimePicker;
-            mHour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-            mMinutes = mcurrentTime.get(Calendar.MINUTE);
-            mTimePicker = new TimePickerDialog(NewMeetingActivity.this, (timePicker, selectedHour, selectedMinute) -> {
+    /* After user decided on a date, store those in our calendar variable and then start the TimePickerDialog immediately */
+    private final DatePickerDialog.OnDateSetListener mDateDataSet = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            mcurrentTime.set(Calendar.YEAR, year);
+            mcurrentTime.set(Calendar.MONTH, monthOfYear);
+            mcurrentTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            new TimePickerDialog(NewMeetingActivity.this, mTimeDataSet, mcurrentTime.get(Calendar.HOUR_OF_DAY), mcurrentTime.get(Calendar.MINUTE), true).show();
+        }
+    };
 
-                try {
-                    mDate = dateFormat.parse(selectedHour + "h" + selectedMinute);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                assert mDate != null;
-                mMeetingTime.setText( dateFormat.format(mDate));
-            }, mHour, mMinutes, true);
-            mTimePicker.setTitle("Selectionez l'heure");
-            mTimePicker.show();
-        });
-    }
+    /* After user decided on a time, save them into Date*/
+    private final TimePickerDialog.OnTimeSetListener mTimeDataSet = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            mcurrentTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            mcurrentTime.set(Calendar.MINUTE, minute);
+            mDate = mcurrentTime.getTime();
+            mMeetingDate.setText(mSimpleDateFormat.format(mcurrentTime.getTime()));
+        }
+    };
 
     private void setUpMailButton(){
         mtvAddEmail.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -191,18 +193,26 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
 
     private void setUpValidButton(){
         mbtnValidNewMeeting.setOnClickListener(view -> {
-            if (isItPossible(mDate) != null){
-                showToast("Tu à déjas une reunion à " + (dateFormat.format(Objects.requireNonNull(isItPossible(mDate)))));
-            }else if (mtvTuto.getText().length() == 0){
-                showToast("n'oubliez pas le sujet de la réunion");
+
+            mRoom = mSpinnerRoom.getText().toString();
+            mTuto = mtvTuto.getText().toString();
+
+            if (mDate == null){
+                showToast("Tu n'à pas entré(e) de date");
+            }else if (mDate.before(mActualDate)){
+                showToast("La date que tu à entré est passé");
+            }else if (isItPossible(mDate) != null){
+                showToast("Tu à déjas une reunion le " + (mSimpleDateFormat.format(Objects.requireNonNull(isItPossible(mDate)))));
+            }else if (mRoom.isEmpty()){
+                showToast("N'oubli pas la salle de réu");
+            }else if (mTuto.length() == 0){
+                    showToast("n'oubliez pas le sujet de la réunion");
             }else if (mEmailList.isEmpty()) {
                 showToast("une réunion tout seul !! étrange");
             }else if (mEmailList.size()<2){
                 showToast("il faut au moin 2 participant");
             } else {
-                mRandomColors = new RandomColors(view.getContext());
-                mTuto = mtvTuto.getText().toString();
-                mMeeting = new Meeting(mDate,mRoom,mTuto,mEmailList,mRandomColors.getColor());
+                mMeeting = new Meeting(mDate,mRoom,mTuto,mEmailList,mColor);
                 saveMeetingAndBack();
             }
         });
@@ -255,10 +265,11 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
     we return this meeting to tell customer he already have meeting at this time
      */
     private Date isItPossible (Date timeToCheck){
-
         for (Meeting meeting : mMeetings) {
-            long different_milli = meeting.getDate().getTime() - timeToCheck.getTime();
-            if (different_milli<MEETING_TIME && different_milli> -MEETING_TIME) { return meeting.getDate(); }
+            if (!mIsItNew && !meeting.equals(mMeeting)){
+                long different_milli = meeting.getDate().getTime() - timeToCheck.getTime();
+                if (different_milli<MEETING_TIME && different_milli> -MEETING_TIME) { return meeting.getDate(); }
+            }
         }
         return null;
     }

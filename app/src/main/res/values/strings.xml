@@ -10,7 +10,5 @@
     <string name="e_mail_des_participants">E-Mail des participants</string>
     <string name="valider">Valider</string>
     <string name="lieu_de_la_r_u">Lieu de la Réu</string>
-    <string name="_20_00">20:00</string>
-    <string name="heure_de_la_r_u">Heure de la Réu</string>
-    <string name="date_de_la_r_u">Date de la réu</string>
+    <string name="date_de_la_r_u">Date et heure de la réu</string>
 </resources>
