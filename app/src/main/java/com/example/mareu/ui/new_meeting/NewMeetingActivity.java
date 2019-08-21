@@ -120,7 +120,7 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
      */
     private void configVars() {
         mDate = null;
-        mSimpleDateFormat = new SimpleDateFormat("MM/dd/yyyy H'h'mm", Locale.FRENCH);
+        mSimpleDateFormat = new SimpleDateFormat("dd/MM/yyyy H'h'mm", Locale.FRENCH);
         mMeetingApiService = DI.getServiceMeet();
         mMeetings = mMeetingApiService.getMeetings();
         mEmailList = new ArrayList<>();
@@ -129,7 +129,7 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
     }
 
     /*
-     Check if we make a new meeting or modifie one
+     Check if we make a new meeting or modify one
      */
     private boolean isItNew(){
         Intent intent = getIntent();
@@ -139,7 +139,7 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
     }
 
     /*
-      If modifie meeting set ui elements
+      If modify meeting set ui elements
      */
     private void setUiIfEdit(){
         mColor = mMeeting.getMeetingColor();
