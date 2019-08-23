@@ -27,21 +27,19 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/linearLayoutDate"
-        android:layout_width="0dp"
+        android:layout_width="345dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
         android:hint="@string/date_de_la_r_u"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tvMeetingDate"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:ems="10"
             android:focusable="false"
             android:inputType="textPersonName"
@@ -51,33 +49,32 @@
 
     <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
         android:id="@+id/spinnerRoom"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
         android:hint="@string/lieu_de_la_r_u"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutDate"
+        app:layout_constraintStart_toEndOf="@+id/linearLayoutDate"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         app:met_floatingLabel="normal" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/LinearLayoutTuto"
+        android:layout_width="345dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
+        android:hint="@string/sujet_de_la_r_u"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerRoom"
-        android:hint="@string/sujet_de_la_r_u"
         tools:ignore="ExtraText">
         ​
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tvTuto"
             android:layout_width="match_parent"
@@ -87,23 +84,23 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textIputLayoutEmail"
-        android:hint="@string/e_mail_des_participants"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="57dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
+        android:hint="@string/e_mail_des_participants"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LinearLayoutTuto">
+        app:layout_constraintStart_toEndOf="@+id/LinearLayoutTuto"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerRoom">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/tvAddEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:imeOptions="actionDone"/>
+            android:imeOptions="actionDone"
+            android:inputType="textEmailAddress" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
