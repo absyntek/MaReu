@@ -27,7 +27,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/linearLayoutDate"
-        android:layout_width="353dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
@@ -35,6 +35,7 @@
         android:hint="@string/date_de_la_r_u"
         android:orientation="horizontal"
         app:layout_constraintEnd_toStartOf="@+id/spinnerRoom"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
@@ -51,7 +52,7 @@
 
     <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
         android:id="@+id/spinnerRoom"
-        android:layout_width="354dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
@@ -59,17 +60,21 @@
         android:hint="@string/lieu_de_la_r_u"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/linearLayoutDate"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         app:met_floatingLabel="normal" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/LinearLayoutTuto"
-        android:layout_width="353dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:hint="@string/sujet_de_la_r_u"
         android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/textIputLayoutEmail"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerRoom"
         tools:ignore="ExtraText">
@@ -84,7 +89,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textIputLayoutEmail"
-        android:layout_width="354dp"
+        android:layout_width="0dp"
         android:layout_height="57dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
@@ -92,6 +97,7 @@
         android:hint="@string/e_mail_des_participants"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/LinearLayoutTuto"
         app:layout_constraintTop_toBottomOf="@+id/spinnerRoom">
 
