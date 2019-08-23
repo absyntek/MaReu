@@ -89,22 +89,6 @@ public class Meeting {
         mMeetingColor = meetingColor;
     }
 
-    private static class MeetingComparatorTime implements Comparator<Meeting>{
-
-        @Override
-        public int compare(Meeting meeting, Meeting t1) {
-            return meeting.mDate.compareTo(t1.mDate);
-        }
-    }
-
-    private static class MeetingComparatorRoom implements Comparator<Meeting>{
-
-        @Override
-        public int compare(Meeting meeting, Meeting t1) {
-            return meeting.mMeetingPoint.compareTo(t1.mMeetingPoint);
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -44,7 +44,6 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
 
     private MeetingApiService mMeetingApiService;
     private Meeting mMeeting;
-    private RandomColors mRandomColors;
     private SimpleDateFormat mSimpleDateFormat;
     private Calendar mcurrentTime;
 
@@ -88,8 +87,8 @@ public class NewMeetingActivity extends AppCompatActivity implements View.OnClic
             mMeeting = mMeetings.get(mMeetingID);
             setUiIfEdit();
         }else {
-            mRandomColors = new RandomColors(this);
-            mColor = mRandomColors.getColor();
+            RandomColors randomColors = new RandomColors(this);
+            mColor = randomColors.getColor();
         }
 
         configAndSetUpSpinnerRoom();
